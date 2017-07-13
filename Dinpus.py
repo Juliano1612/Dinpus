@@ -297,6 +297,7 @@ def showTab():
     for x in range(4):
         for y in range(4):
             if tabuleiroJogo[x][y] == 7 and discoveryMatrix[x][y] == 1: #brisa + fedor
+                #tabuleiro.delete(cells[])
                 cellsImg[x][y] = Label(tabuleiro, image = brisafedor)
                 cellsImg[x][y].image = brisafedor
                 cellsImg[x][y].grid(row = x, column = y)
