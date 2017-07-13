@@ -13,8 +13,10 @@ tabuleiro.grid(row = 4, column = 4)
 # 1 - Jogador, 2 - Poço, 3 - Wumpus, 4 - Tesouro, 5 - Brisa, 6 - Fedor, 7 - Brisa + Fedor
 xPl = 3
 yPl = 0
+score = 1000
 wumpusLiving = True
 temFlecha = True
+getTreasure = False
 
 elementosJogo = [2,2,3,4]
 tabuleiroJogo = [[0 for x in range(4)] for y in range(4)]
@@ -283,8 +285,11 @@ fedor = PhotoImage(file = "Images/poop148x148.gif")
 brisafedor = PhotoImage(file = "Images/windpoop148x148.gif")
 arrowIc = PhotoImage(file="Images/arrow100x100.gif")
 wumpusIc = PhotoImage(file="Images/wumpus100x100.gif")
+treasureIc = PhotoImage(file="Images/treasure100x100.gif")
 wumpusDanger = PhotoImage(file="Images/danger60x60.gif")
 wumpusSafe = PhotoImage(file="Images/safe60x60.gif")
+notreasure = PhotoImage(file="Images/notreasure60x60.gif")
+yestreasure = PhotoImage(file="Images/yestreasure60x60.gif")
 
 
 def showTab():
@@ -329,40 +334,54 @@ def showTab():
 
     arrow = Label(mainframe, image=arrowIc)
     arrow.image = arrowIc
-    arrow.place(x=630, y=250)
+    arrow.place(x=630, y=150)
 
     wumpusicon = Label(mainframe, image=wumpusIc)
     wumpusicon.image = wumpusIc
-    wumpusicon.place(x=630, y=400)
+    wumpusicon.place(x=630, y=300)
+
+    treasureicon = Label(mainframe, image=treasureIc)
+    treasureicon.image = treasureIc
+    treasureicon.place(x=630, y=450)
 
     scoreTitle = Label(mainframe, text = "SCORE", font="Times 20 bold")
     scoreTitle.place(x=690, y=20)
-    scoreValue = Label(mainframe, text="0", font="Times 18")
-    scoreValue.place(x=730, y=60)
+    scoreValue = Label(mainframe, text=str(score), font="Times 18")
+    scoreValue.place(x=710, y=60)
 
     if wumpusLiving:
         wumpusStats = Label(mainframe, image=wumpusDanger)
         wumpusStats.image = wumpusDanger
-        wumpusStats.place(x=730, y=420)
+        wumpusStats.place(x=730, y=320)
     else:
         wumpusStats = Label(mainframe, image=wumpusSafe)
         wumpusStats.image = wumpusSafe
-        wumpusStats.place(x=730, y=420)
+        wumpusStats.place(x=730, y=320)
 
     if temFlecha:
         numFlechas = Label(mainframe, text="1", font="Times 20 bold")
-        numFlechas.place(x=750, y=280)
+        numFlechas.place(x=750, y=180)
     else:
         numFlechas = Label(mainframe, text="0", font="Times 20 bold")
-        numFlechas.place(x=750, y=280)
+        numFlechas.place(x=750, y=180)
+
+    if getTreasure:
+        treasureStats = Label(mainframe, image = yestreasure)
+        treasureStats.image = yestreasure
+        treasureStats.place(x=740, y=470)
+    else:
+        treasureStats = Label(mainframe, image=notreasure)
+        treasureStats.image = notreasure
+        treasureStats.place(x=740, y=470)
 
 
 
 
 
 def pressUp(self):
-    global xPl, yPl
+    global xPl, yPl, score
     if xPl != 0:
+        score = score-1
         xPl = xPl-1
         discoveryMatrix[xPl][yPl] = 1
         print("Agora estou em " + str(xPl) + " " + str(yPl))
@@ -370,8 +389,9 @@ def pressUp(self):
 
 
 def pressDown(self):
-    global xPl, yPl
+    global xPl, yPl, score
     if xPl != 3:
+        score = score-1
         xPl = xPl+1
         discoveryMatrix[xPl][yPl] = 1
         print("Agora estou em " + str(xPl) + " " + str(yPl))
@@ -380,8 +400,9 @@ def pressDown(self):
 
 
 def pressLeft(self):
-    global xPl, yPl
+    global xPl, yPl, score
     if yPl != 0:
+        score = score-1
         yPl = yPl-1
         discoveryMatrix[xPl][yPl] = 1
         print("Agora estou em " + str(xPl) + " " + str(yPl))
@@ -390,8 +411,9 @@ def pressLeft(self):
 
 
 def pressRight(self):
-    global xPl, yPl
+    global xPl, yPl, score
     if yPl != 3:
+        score = score-1
         yPl = yPl+1
         discoveryMatrix[xPl][yPl] = 1
         print("Agora estou em " + str(xPl) + " " + str(yPl))
@@ -409,7 +431,11 @@ def pressK(self):
     temFlecha = False
     showTab()
 
-
+def pressT(self):
+    global getTreasure
+    print("You got the treasure!")
+    getTreasure = True
+    showTab()
 
 
 
@@ -419,6 +445,7 @@ tabuleiro.bind('<Left>', pressLeft)
 tabuleiro.bind('<Right>', pressRight)
 tabuleiro.bind('<r>', pressR)
 tabuleiro.bind('<k>', pressK)
+tabuleiro.bind('<t>', pressT)
 
 tabuleiro.focus_set()
 
