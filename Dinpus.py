@@ -274,7 +274,7 @@ print(tabuleiroJogo[3])
 
 cellsImg = [[0 for x in range(4)] for y in range(4)]
 blankimg = PhotoImage()
-player = PhotoImage(file = "Images/player120x80.gif")
+player = PhotoImage(file = "Images/player90x60.gif")
 tesouro = PhotoImage(file = "Images/treasure148x148.gif")
 poco = PhotoImage(file = "Images/well148x148.gif")
 wumpus = PhotoImage(file = "Images/wumpus148x148.gif")
@@ -325,7 +325,7 @@ def showTab():
 
     jogador = Label(tabuleiro, image=player)
     jogador.image = player
-    jogador.place(x=(150*yPl)+20, y=(150*xPl)+30)
+    jogador.place(x=(150*yPl)+10, y=(150*xPl)+60)
 
     arrow = Label(mainframe, image=arrowIc)
     arrow.image = arrowIc
