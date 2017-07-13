@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from random import *
 import random
 import os
@@ -13,10 +14,11 @@ tabuleiro.grid(row = 4, column = 4)
 # 1 - Jogador, 2 - Poço, 3 - Wumpus, 4 - Tesouro, 5 - Brisa, 6 - Fedor, 7 - Brisa + Fedor
 xPl = 3
 yPl = 0
-score = 1000
+score = 0
 wumpusLiving = True
 temFlecha = True
 getTreasure = False
+gameover = False
 
 elementosJogo = [2,2,3,4]
 tabuleiroJogo = [[0 for x in range(4)] for y in range(4)]
@@ -298,32 +300,30 @@ def showTab():
     for x in range(4):
         for y in range(4):
             if tabuleiroJogo[x][y] == 7 and discoveryMatrix[x][y] == 1: #brisa + fedor
-                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = brisafedor)
                 cellsImg[x][y].image = brisafedor
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 6 and discoveryMatrix[x][y] == 1: #fedor
-                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = fedor)
                 cellsImg[x][y].image = fedor
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 5 and discoveryMatrix[x][y] == 1: #brisa
-                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = brisa)
                 cellsImg[x][y].image = brisa
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 4 and discoveryMatrix[x][y] == 1: #tesouro
-                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = tesouro)
                 cellsImg[x][y].image = tesouro
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 3 and discoveryMatrix[x][y] == 1: #wumpus
-                tabuleiro.delete(cellsImg[x][y])
-                cellsImg[x][y] = Label(tabuleiro, image = wumpus)
-                cellsImg[x][y].image = wumpus
-                cellsImg[x][y].grid(row = x, column = y)
+                if(wumpusLiving):
+                    cellsImg[x][y] = Label(tabuleiro, image = wumpus)
+                    cellsImg[x][y].image = wumpus
+                    cellsImg[x][y].grid(row = x, column = y)
+                else:
+                    cellsImg[x][y] = Label(tabuleiro, image=blankimg, compound=CENTER, width=148, height=148)
+                    cellsImg[x][y].grid(row=x, column=y, padx=1, pady=1)
             elif tabuleiroJogo[x][y] == 2 and discoveryMatrix[x][y] == 1: #poco
-                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = poco)
                 cellsImg[x][y].image = poco
                 cellsImg[x][y].grid(row = x, column = y)
@@ -332,7 +332,6 @@ def showTab():
              #   cellsImg[x][y].image = player
              #   cellsImg[x][y].grid(row = x, column = y)
             else:
-                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = blankimg, compound = CENTER, width = 148, height = 148)
                 cellsImg[x][y].grid(row = x, column = y, padx = 1, pady = 1)
 
@@ -387,63 +386,129 @@ def showTab():
 
 
 def pressUp(self):
-    global xPl, yPl, score
-    if xPl != 0:
-        score = score-1
-        xPl = xPl-1
-        discoveryMatrix[xPl][yPl] = 1
-        print("Agora estou em " + str(xPl) + " " + str(yPl))
-        showTab()
+    global xPl, yPl, score, gameover
+    if not(gameover):
+        if xPl != 0:
+            score = score-1
+            xPl = xPl-1
+            discoveryMatrix[xPl][yPl] = 1
+            print("Agora estou em " + str(xPl) + " " + str(yPl))
+            showTab()
+            beRich()
+            died()
 
 
 def pressDown(self):
-    global xPl, yPl, score
-    if xPl != 3:
-        score = score-1
-        xPl = xPl+1
-        discoveryMatrix[xPl][yPl] = 1
-        print("Agora estou em " + str(xPl) + " " + str(yPl))
-        showTab()
-
+    global xPl, yPl, score, gameover
+    if not(gameover):
+        if xPl != 3:
+            score = score-1
+            xPl = xPl+1
+            discoveryMatrix[xPl][yPl] = 1
+            print("Agora estou em " + str(xPl) + " " + str(yPl))
+            showTab()
+            beRich()
+            died()
 
 
 def pressLeft(self):
-    global xPl, yPl, score
-    if yPl != 0:
-        score = score-1
-        yPl = yPl-1
-        discoveryMatrix[xPl][yPl] = 1
-        print("Agora estou em " + str(xPl) + " " + str(yPl))
-        showTab()
-
+    global xPl, yPl, score, gameover
+    if not(gameover):
+        if yPl != 0:
+            score = score-1
+            yPl = yPl-1
+            discoveryMatrix[xPl][yPl] = 1
+            print("Agora estou em " + str(xPl) + " " + str(yPl))
+            showTab()
+            beRich()
+            died()
 
 
 def pressRight(self):
-    global xPl, yPl, score
-    if yPl != 3:
-        score = score-1
-        yPl = yPl+1
-        discoveryMatrix[xPl][yPl] = 1
-        print("Agora estou em " + str(xPl) + " " + str(yPl))
-        showTab()
+    global xPl, yPl, score, gameover
+    if not(gameover):
+        if yPl != 3:
+            score = score-1
+            yPl = yPl+1
+            discoveryMatrix[xPl][yPl] = 1
+            print("Agora estou em " + str(xPl) + " " + str(yPl))
+            showTab()
+            beRich()
+            died()
 
 def pressR(self):
     print("Restart!")
     mainframe.destroy()
     os.system("python3.5 Dinpus.py")
 
-def pressK(self):
-    global wumpusLiving, temFlecha
-    print("Wumpus Killed!")
-    wumpusLiving = False
-    temFlecha = False
-    showTab()
 
-def pressT(self):
-    global getTreasure
-    print("You got the treasure!")
-    getTreasure = True
-    showTab()
+
+def pressControlHorizontal(f):
+    global xPl, yPl, tabuleiroJogo, wumpusLiving, temFlecha, score
+    if temFlecha:
+        temFlecha=False
+        score = score-9
+        if f == 0:#right
+            for y in range(yPl, 4):
+                if(tabuleiroJogo[xPl][y] == 3):
+                    print("Wumpus Killed!")
+                    score = score + 1000
+                    wumpusLiving=False
+        else:
+            for y in range(0, yPl):
+                if(tabuleiroJogo[xPl][y] == 3):
+                    print("Wumpus Killed!")
+                    score = score + 1000
+                    wumpusLiving=False
+
+def pressControlVertical(f):
+    global xPl, yPl, tabuleiroJogo, wumpusLiving, temFlecha, score
+    if temFlecha:
+        temFlecha=False
+        score = score-9
+        if f == 0:#up
+            for x in range(0, xPl):
+                if(tabuleiroJogo[x][yPl] == 3):
+                    print("Wumpus Killed!")
+                    score = score + 1000
+                    wumpusLiving=False
+                    showTab()
+
+        else:#down
+            for x in range(xPl, 4):
+                if(tabuleiroJogo[x][yPl] == 3):
+                    print("Wumpus Killed!")
+                    score = score + 1000
+                    wumpusLiving=False
+                    showTab()
+
+
+def died():
+    global xPl, yPl, tabuleiroJogo, gameover, score
+    if (tabuleiroJogo[xPl][yPl] == 3 and wumpusLiving) or tabuleiroJogo[xPl][yPl] == 2:
+        print("GameOver!")
+        score = score -1000
+        gameover = True
+        showTab()
+        messagebox.showinfo("You died!", "Game Over!\nFinal Score :"+ str(score).zfill(4) + "\nPress [r] to restart")
+
+def beRich():
+    global xPl, yPl, tabuleiroJogo, getTreasure
+    if tabuleiroJogo[xPl][yPl]==4 and not(getTreasure):
+        getTreasure = True
+        showTab()
+        print("You got the treasure!")
+
+def winner(self):
+    global xPl, yPl, getTreasure, score, gameover
+    print("vamoacaba?")
+    if xPl == 3 and yPl == 0:
+        if(getTreasure == True):
+            score = score+1000
+            showTab()
+        gameover = True
+        messagebox.showinfo("That's All!", "You Win!\nFinal Score :"+ str(score).zfill(4) +"\nPress [r] to restart")
+
 
 
 
@@ -451,9 +516,12 @@ tabuleiro.bind('<Up>', pressUp)
 tabuleiro.bind('<Down>', pressDown)
 tabuleiro.bind('<Left>', pressLeft)
 tabuleiro.bind('<Right>', pressRight)
+tabuleiro.bind('<Control-Key-Right>', lambda event: pressControlHorizontal(f = 0))
+tabuleiro.bind('<Control-Key-Left>', lambda event: pressControlHorizontal(f = 1))
+tabuleiro.bind('<Control-Key-Up>', lambda event: pressControlVertical(f = 0))
+tabuleiro.bind('<Control-Key-Down>', lambda event: pressControlVertical(f = 1))
+tabuleiro.bind('<Return>', winner)
 tabuleiro.bind('<r>', pressR)
-tabuleiro.bind('<k>', pressK)
-tabuleiro.bind('<t>', pressT)
 
 tabuleiro.focus_set()
 
