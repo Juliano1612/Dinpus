@@ -292,32 +292,38 @@ notreasure = PhotoImage(file="Images/notreasure60x60.gif")
 yestreasure = PhotoImage(file="Images/yestreasure60x60.gif")
 
 
-def showTab():
+mainframe.title("Dinpus")
 
+def showTab():
     for x in range(4):
         for y in range(4):
             if tabuleiroJogo[x][y] == 7 and discoveryMatrix[x][y] == 1: #brisa + fedor
-                #tabuleiro.delete(cells[])
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = brisafedor)
                 cellsImg[x][y].image = brisafedor
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 6 and discoveryMatrix[x][y] == 1: #fedor
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = fedor)
                 cellsImg[x][y].image = fedor
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 5 and discoveryMatrix[x][y] == 1: #brisa
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = brisa)
                 cellsImg[x][y].image = brisa
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 4 and discoveryMatrix[x][y] == 1: #tesouro
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = tesouro)
                 cellsImg[x][y].image = tesouro
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 3 and discoveryMatrix[x][y] == 1: #wumpus
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = wumpus)
                 cellsImg[x][y].image = wumpus
                 cellsImg[x][y].grid(row = x, column = y)
             elif tabuleiroJogo[x][y] == 2 and discoveryMatrix[x][y] == 1: #poco
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = poco)
                 cellsImg[x][y].image = poco
                 cellsImg[x][y].grid(row = x, column = y)
@@ -326,6 +332,7 @@ def showTab():
              #   cellsImg[x][y].image = player
              #   cellsImg[x][y].grid(row = x, column = y)
             else:
+                tabuleiro.delete(cellsImg[x][y])
                 cellsImg[x][y] = Label(tabuleiro, image = blankimg, compound = CENTER, width = 148, height = 148)
                 cellsImg[x][y].grid(row = x, column = y, padx = 1, pady = 1)
 
@@ -347,7 +354,7 @@ def showTab():
 
     scoreTitle = Label(mainframe, text = "SCORE", font="Times 20 bold")
     scoreTitle.place(x=690, y=20)
-    scoreValue = Label(mainframe, text=str(score), font="Times 18")
+    scoreValue = Label(mainframe, text=str(score).zfill(4), font="Times 18")
     scoreValue.place(x=710, y=60)
 
     if wumpusLiving:
